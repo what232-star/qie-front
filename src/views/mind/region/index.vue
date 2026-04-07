@@ -59,13 +59,16 @@
 
     <el-table v-loading="loading" :data="regionList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="主键ID" align="center" prop="id" />
+<!--      添加type实现序号-->
+      <el-table-column label="序号" type="index" width="50" align="center" prop="id" />
       <el-table-column label="区域名称" align="center" prop="regionName" />
-      <el-table-column label="修改人" align="center" prop="updateBy" />
+      <el-table-column label="点位数" align="center" prop="nodeCount" />
+      <el-table-column label="备注说明" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['mind:region:edit']">修改</el-button>
-          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['mind:region:remove']">删除</el-button>
+<!--          icon用来放图标-->
+          <el-button link type="primary"  @click="handleUpdate(scope.row)" v-hasPermi="['mind:region:edit']">修改</el-button>
+          <el-button link type="primary"  @click="handleDelete(scope.row)" v-hasPermi="['mind:region:remove']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -83,6 +86,9 @@
       <el-form ref="regionRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="区域名称" prop="regionName">
           <el-input v-model="form.regionName" placeholder="请输入区域名称" />
+        </el-form-item>
+        <el-form-item label="备注" prop="remark">
+          <el-input v-model="form.remark" type="textarea" placeholder="请输入备注说明" />
         </el-form-item>
       </el-form>
       <template #footer>

@@ -42,3 +42,11 @@ export function delBear(id) {
     method: 'delete'
   })
 }
+
+//重置熊熊合作商密码
+export function resetBearPwd(id) {
+  return request({
+    url: '/mind/bear/resetPwd/' + id,
+    method: 'put'
+  })
+}

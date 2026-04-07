@@ -11,6 +11,7 @@ export function listRegion(query) {
 
 // 查询区域管理详细
 export function getRegion(id) {
+
   return request({
     url: '/mind/region/' + id,
     method: 'get'

@@ -9,22 +9,12 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="区域外键" prop="regionId">
-        <el-input
-          v-model="queryParams.regionId"
-          placeholder="请输入区域外键"
-          clearable
-          @keyup.enter="handleQuery"
-        />
+      <el-form-item label="区域选择" prop="regionId">
+        <el-select v-model="queryParams.regionId" placeholder="请选择区域" clearable style="width: 200px">
+          <el-option v-for="item in regionList" :key="item.id" :label="item.regionName" :value="item.id" />
+        </el-select>
       </el-form-item>
-      <el-form-item label="合作商外键" prop="bearId">
-        <el-input
-          v-model="queryParams.bearId"
-          placeholder="请输入合作商外键"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
+
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
         <el-button icon="Refresh" @click="resetQuery">重置</el-button>
@@ -75,16 +65,25 @@
 
     <el-table v-loading="loading" :data="nodeListList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="主键ID" align="center" prop="id" />
-      <el-table-column label="点位名称" align="center" prop="nodeName" />
-      <el-table-column label="详细地址" align="center" prop="detailedAddress" />
-      <el-table-column label="商圈类型" align="center" prop="businessType" />
-      <el-table-column label="区域外键" align="center" prop="regionId" />
-      <el-table-column label="合作商外键" align="center" prop="bearId" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="序号"  type="index" align="center" prop="id" width="60" />
+      <el-table-column label="点位名称" align="center" prop="nodeName" show-overflow-tooltip min-width="120" />
+      <el-table-column label="区域名称" align="center" prop="region.regionName" show-overflow-tooltip min-width="100" />
+      <el-table-column label="商圈类型" align="center" prop="businessType" show-overflow-tooltip min-width="100">
         <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['mind:nodeList:edit']">修改</el-button>
-          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['mind:nodeList:remove']">删除</el-button>
+          <span v-if="scope.row.businessType === 1">开放区</span>
+          <span v-else-if="scope.row.businessType === 2">教学楼</span>
+          <span v-else-if="scope.row.businessType === 3">商业区</span>
+          <span v-else-if="scope.row.businessType === 4">食堂区</span>
+          <span v-else>-</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="合作商名称" align="center" prop="bear.bearName" show-overflow-tooltip min-width="100" />
+      <el-table-column label="详细地址" align="center" prop="address" show-overflow-tooltip min-width="200" />
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="180">
+        <template #default="scope">
+          <el-button link type="primary"  @click="handleUpdate(scope.row)" v-hasPermi="['mind:nodeList:edit']">修改</el-button>
+          <el-button link type="primary"  @click="handleDelete(scope.row)" v-hasPermi="['mind:nodeList:remove']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -99,18 +98,40 @@
 
     <!-- 添加或修改点位管理对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-      <el-form ref="nodeListRef" :model="form" :rules="rules" label-width="80px">
+      <el-form :model="form" ref="nodeListRef" :rules="rules" label-width="100px">
         <el-form-item label="点位名称" prop="nodeName">
-          <el-input v-model="form.nodeName" placeholder="请输入点位名称" />
+          <el-input
+              v-model="form.nodeName"
+              placeholder="请输入点位名称"
+              clearable
+          />
         </el-form-item>
-        <el-form-item label="详细地址" prop="detailedAddress">
-          <el-input v-model="form.detailedAddress" placeholder="请输入详细地址" />
+        <el-form-item label="区域选择" prop="regionId">
+          <el-select v-model="form.regionId" placeholder="请选择区域" clearable>
+            <el-option v-for="item in regionList" :key="item.id" :label="item.regionName" :value="item.id" />
+          </el-select>
         </el-form-item>
-        <el-form-item label="区域外键" prop="regionId">
-          <el-input v-model="form.regionId" placeholder="请输入区域外键" />
+        <el-form-item label="合作商选择" prop="bearId">
+          <el-select v-model="form.bearId" placeholder="请选择合作商" clearable style="width: 200px">
+            <el-option v-for="item in bearList" :key="item.id" :label="item.bearName" :value="item.id" />
+          </el-select>
         </el-form-item>
-        <el-form-item label="合作商外键" prop="bearId">
-          <el-input v-model="form.bearId" placeholder="请输入合作商外键" />
+        <el-form-item label="商圈类型" prop="businessType">
+          <el-select v-model="form.businessType" placeholder="请选择商圈类型" clearable style="width: 200px">
+            <el-option label="开放区" :value="1" />
+            <el-option label="教学楼" :value="2" />
+            <el-option label="商业区" :value="3" />
+            <el-option label="食堂区" :value="4" />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="详细地址" prop="address">
+          <el-input
+              v-model="form.address"
+              type="textarea"
+              :rows="3"
+              placeholder="请输入详细地址"
+          />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -125,6 +146,9 @@
 
 <script setup name="NodeList">
 import { listNodeList, getNodeList, delNodeList, addNodeList, updateNodeList } from "@/api/mind/nodeList"
+import {listRegion} from "@/api/mind/region.js";
+import {listBear} from "@/api/mind/bear.js";
+import  {loadAllParams} from "@/api/page.js";
 
 const { proxy } = getCurrentInstance()
 
@@ -151,7 +175,7 @@ const data = reactive({
     nodeName: [
       { required: true, message: "点位名称不能为空", trigger: "blur" }
     ],
-    detailedAddress: [
+    address: [
       { required: true, message: "详细地址不能为空", trigger: "blur" }
     ],
     businessType: [
@@ -189,7 +213,7 @@ function reset() {
   form.value = {
     id: null,
     nodeName: null,
-    detailedAddress: null,
+    address: null,
     businessType: null,
     regionId: null,
     bearId: null,
@@ -277,6 +301,33 @@ function handleExport() {
     ...queryParams.value
   }, `nodeList_${new Date().getTime()}.xlsx`)
 }
+//
+// /*查询所有条件对象 */
+// const loadAllParams = reactive({
+//   pageNum: 1,
+//   pageSize: 10000
+// })
 
+const regionList = ref([]);
+
+/** 查询区域列表 */
+function getRegionList() {
+  listRegion(loadAllParams).then(response => {
+    regionList.value = response.rows;
+  })
+}
+
+const bearList = ref([]);
+
+/*查询熊熊合作商列表 */
+function getBearList() {
+  listBear(loadAllParams).then( response=> {
+    bearList.value = response.rows;
+  })
+}
+
+
+getBearList()
+getRegionList()
 getList()
 </script>
