@@ -105,7 +105,7 @@
     <el-dialog title="区域详情" v-model="regionInfoOpen" width="500px" append-to-body>
       <el-form-item label="区域名称" prop="regionName">
         <el-input v-model="form.regionName" placeholder="请输入区域名称" disabled/>
-        <label 包含点位： ></label>
+        <div style="margin: 10px 0; font-weight: bold;">包含点位：</div>
         <el-table :data="nodeList" >
           <el-table-column type="selection" width="55" align="center" />
           <el-table-column label="序号"  type="index" align="center" prop="id" width="60" />
