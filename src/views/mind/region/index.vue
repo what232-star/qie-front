@@ -67,6 +67,8 @@
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
 <!--          icon用来放图标-->
+<!--          查看详情这里重点展示的是点位有关的信息-->
+          <el-button link type="primary"  @click="getRegionInfo(scope.row)" v-hasPermi="['mind:node:list']">查看详情</el-button>
           <el-button link type="primary"  @click="handleUpdate(scope.row)" v-hasPermi="['mind:region:edit']">修改</el-button>
           <el-button link type="primary"  @click="handleDelete(scope.row)" v-hasPermi="['mind:region:remove']">删除</el-button>
         </template>
@@ -98,11 +100,27 @@
         </div>
       </template>
     </el-dialog>
+
+<!--    查看详情对话框-->
+    <el-dialog title="区域详情" v-model="regionInfoOpen" width="500px" append-to-body>
+      <el-form-item label="区域名称" prop="regionName">
+        <el-input v-model="form.regionName" placeholder="请输入区域名称" disabled/>
+        <label 包含点位： ></label>
+        <el-table :data="nodeList" >
+          <el-table-column type="selection" width="55" align="center" />
+          <el-table-column label="序号"  type="index" align="center" prop="id" width="60" />
+          <el-table-column label="点位名称" align="center" prop="nodeName" show-overflow-tooltip min-width="120" />
+          <el-table-column label="设备数量" align="center" prop="vmCount"  />
+        </el-table>
+      </el-form-item>
+    </el-dialog>
   </div>
 </template>
 
 <script setup name="Region">
 import { listRegion, getRegion, delRegion, addRegion, updateRegion } from "@/api/mind/region"
+import {loadAllParams} from "@/api/page.js";
+import {listNodeList} from "@/api/mind/nodeList.js";
 
 const { proxy } = getCurrentInstance()
 
@@ -137,12 +155,15 @@ const { queryParams, form, rules } = toRefs(data)
 
 /** 查询区域管理列表 */
 function getList() {
+  //查询区域信息
   loading.value = true
   listRegion(queryParams.value).then(response => {
     regionList.value = response.rows
     total.value = response.total
     loading.value = false
   })
+  //查询点位信息
+
 }
 
 // 取消按钮
@@ -200,6 +221,26 @@ function handleUpdate(row) {
     open.value = true
     title.value = "修改区域管理"
   })
+}
+
+const nodeList= ref([])
+const regionInfoOpen = ref(false)
+/*获取详情 */
+function getRegionInfo(row) {
+  //查看区域详情
+  reset()
+  const _id = row.id
+  getRegion(_id).then(response => {
+    form.value = response.data
+  })
+  //查看点位列表
+  //这里不只要用分页对象，还有一个区域的id
+  loadAllParams.regionId = row.id;
+
+  listNodeList(loadAllParams).then((response) => {
+    nodeList.value = response.rows;
+  })
+  regionInfoOpen.value = true;
 }
 
 /** 提交按钮 */

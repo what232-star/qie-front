@@ -82,6 +82,7 @@
       <el-table-column label="详细地址" align="center" prop="address" show-overflow-tooltip min-width="200" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="180">
         <template #default="scope">
+          <el-button link type="primary"  @click="getRegionInfo(scope.row)" v-hasPermi="['mind:node:list']">查看详情</el-button>
           <el-button link type="primary"  @click="handleUpdate(scope.row)" v-hasPermi="['mind:nodeList:edit']">修改</el-button>
           <el-button link type="primary"  @click="handleDelete(scope.row)" v-hasPermi="['mind:nodeList:remove']">删除</el-button>
         </template>
@@ -149,6 +150,8 @@ import { listNodeList, getNodeList, delNodeList, addNodeList, updateNodeList } f
 import {listRegion} from "@/api/mind/region.js";
 import {listBear} from "@/api/mind/bear.js";
 import  {loadAllParams} from "@/api/page.js";
+
+
 
 const { proxy } = getCurrentInstance()
 
@@ -262,6 +265,9 @@ function handleUpdate(row) {
     title.value = "修改点位管理"
   })
 }
+
+
+
 
 /** 提交按钮 */
 function submitForm() {
