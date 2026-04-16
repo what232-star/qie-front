@@ -1,64 +1,15 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="120px">
-      <el-form-item label="设备唯一编号" prop="innerCode">
+    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="设备编号" prop="innerCode">
         <el-input
           v-model="queryParams.innerCode"
-          placeholder="请输入设备唯一编号"
+          placeholder="请输入设备编号"
           clearable
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="关联点位ID" prop="nodeId">
-        <el-input
-          v-model="queryParams.nodeId"
-          placeholder="请输入关联点位ID"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="关联区域ID" prop="regionId">
-        <el-input
-          v-model="queryParams.regionId"
-          placeholder="请输入关联区域ID"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="关联合作商ID" prop="bearId">
-        <el-input
-          v-model="queryParams.bearId"
-          placeholder="请输入关联合作商ID"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="设备型号ID" prop="vmTypeId">
-        <el-input
-          v-model="queryParams.vmTypeId"
-          placeholder="请输入设备型号ID"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="设备状态" prop="vmStatus">
-        <el-select v-model="queryParams.vmStatus" placeholder="请选择设备状态" clearable>
-          <el-option
-            v-for="dict in vm_status"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="关联运营策略ID" prop="policyId">
-        <el-input
-          v-model="queryParams.policyId"
-          placeholder="请输入关联运营策略ID"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
+
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
         <el-button icon="Refresh" @click="resetQuery">重置</el-button>
@@ -109,11 +60,25 @@
 
     <el-table v-loading="loading" :data="machineList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="主键ID" align="center" prop="id" />
-      <el-table-column label="设备唯一编号" align="center" prop="innerCode" />
+      <el-table-column label="设备编号" align="center" prop="innerCode" />
       <el-table-column label="设备详细地址" align="center" prop="addr" />
-      <el-table-column label="关联合作商ID" align="center" prop="bearId" />
-      <el-table-column label="设备型号ID" align="center" prop="vmTypeId" />
+      <el-table-column label="关联熊熊合作商" align="center" prop="bearId" >
+        <template #default="scope">
+          <div v-for="item in bear_list" :key="item.id">
+            <span v-if="item.id == scope.row.bearId"> {{ item.bearName }} </span>
+          </div>
+        </template>
+      </el-table-column>
+
+
+
+      <el-table-column label="设备型号" align="center" prop="vmTypeId" >
+        <template #default="scope">
+          <div v-for="item in vm_type_list" :key="item.id">
+            <span v-if="item.id == scope.row.vmTypeId"> {{ item.name }} </span>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column label="设备状态" align="center" prop="vmStatus">
         <template #default="scope">
           <dict-tag :options="vm_status" :value="scope.row.vmStatus"/>
@@ -121,8 +86,8 @@
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['mind:machine:edit']">修改</el-button>
-          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['mind:machine:remove']">删除</el-button>
+          <el-button link type="primary"  @click="handleUpdate(scope.row)" v-hasPermi="['mind:machine:edit']">修改</el-button>
+
         </template>
       </el-table-column>
     </el-table>
@@ -137,21 +102,56 @@
 
     <!-- 添加或修改自动售货机设备管理对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-      <el-form ref="machineRef" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="设备唯一编号" prop="innerCode">
-          <el-input v-model="form.innerCode" placeholder="请输入设备唯一编号" />
+      <el-form ref="machineRef" :model="form" :rules="rules" label-width="90px" class="machine-form">
+        <el-form-item label="设备编号" prop="innerCode">
+          <span>{{form.innerCode==null?"系统自动生成":form.innerCode}}</span>
         </el-form-item>
-        <el-form-item label="关联点位ID" prop="nodeId">
-          <el-input v-model="form.nodeId" placeholder="请输入关联点位ID" />
+        <el-form-item label="供货时间" v-if="form.innerCode != null">
+          <span>{{ form.lastSupplyTime ? parseTime(form.lastSupplyTime, '{y}-{m}-{d} {h}:{i}:{s}') : '暂无数据' }}</span>
         </el-form-item>
-        <el-form-item label="设备型号ID" prop="vmTypeId">
-          <el-input v-model="form.vmTypeId" placeholder="请输入设备型号ID" />
+        <el-form-item label="设备类型" v-if="form.innerCode != null">
+          <el-tag type="success">{{ vm_type_list.find(item => item.id == form.vmTypeId)?.name || '未知' }}</el-tag>
+        </el-form-item>
+        <el-form-item label="设备容量" v-if="form.innerCode != null">
+          <el-tag>{{ form.channelMaxCapacity }} 件</el-tag>
+        </el-form-item>
+        <el-form-item label="熊熊合作商" v-if="form.innerCode != null">
+          <el-tag type="warning">{{ bear_list.find(item => item.id == form.bearId)?.bearName || '未知' }}</el-tag>
+        </el-form-item>
+        <el-form-item label="所属区域" v-if="form.innerCode != null">
+          <el-tag type="info">{{ region_list.find(item => item.id == form.regionId)?.regionName || '未知' }}</el-tag>
+        </el-form-item>
+
+        <el-form-item label="设备地址" v-if="form.innerCode != null">
+          <el-tag type="info">{{ form.addr }}</el-tag>
+        </el-form-item>
+
+
+        <el-form-item label="点位选择" prop="nodeId">
+          <el-select v-model="form.nodeId" placeholder="请选择关联点位" style="width: 100%" >
+            <el-option
+                v-for="item in node_list"
+                :key="item.id"
+                :label="item.nodeName"
+                :value="Number(item.id)">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="设备型号" prop="vmTypeId" v-if="form.innerCode == null">
+          <el-select v-model="form.vmTypeId" placeholder="请选择设备型号" style="width: 100%" >
+            <el-option
+                v-for="item in vm_type_list"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button type="primary" @click="submitForm">确 定</el-button>
           <el-button @click="cancel">取 消</el-button>
+          <el-button type="primary" @click="submitForm">确 定</el-button>
         </div>
       </template>
     </el-dialog>
@@ -160,6 +160,11 @@
 
 <script setup name="Machine">
 import { listMachine, getMachine, delMachine, addMachine, updateMachine } from "@/api/mind/machine"
+import {listBear} from "@/api/mind/bear.js";
+import { listVmType} from "@/api/mind/vmType.js";
+import {loadAllParams} from "@/api/page.js";
+import {listNodeList} from "@/api/mind/nodeList.js";
+import {listRegion} from "@/api/mind/region.js";
 
 const { proxy } = getCurrentInstance()
 const { vm_status } = proxy.useDict('vm_status')
@@ -321,5 +326,52 @@ function handleExport() {
   }, `machine_${new Date().getTime()}.xlsx`)
 }
 
+
+const vm_type_list = ref([])
+//查询设备类型列表
+function getVmTypeList() {
+  listVmType(loadAllParams).then(response => {
+    vm_type_list.value = response.rows
+  })
+}
+
+const bear_list = ref([])
+//查询熊熊列表
+function getBearList() {
+  listBear(loadAllParams).then(response => {
+    bear_list.value = response.rows
+  })
+}
+
+const node_list = ref([])
+//获取节点列表
+function getNodeList() {
+  listNodeList(loadAllParams).then(response => {
+    node_list.value = response.rows
+  })
+}
+
+//获取区域列表
+const region_list = ref([])
+function getRegion(){
+  listRegion(loadAllParams).then(response => {
+    region_list.value = response.rows
+  })
+}
+
+getRegion()
+getNodeList()
+getVmTypeList()
+getBearList()
 getList()
 </script>
+
+<style scoped>
+.machine-form :deep(.el-form-item__content) {
+  justify-content: flex-start;
+}
+.machine-form :deep(.el-divider__text) {
+  font-size: 13px;
+  color: #909399;
+}
+</style>
