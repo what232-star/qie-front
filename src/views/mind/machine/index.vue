@@ -86,6 +86,7 @@
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
+          <el-button link type="primary"  @click="handleUpdatePolicy(scope.row)" v-hasPermi="['mind:machine:edit']">策略</el-button>
           <el-button link type="primary"  @click="handleUpdate(scope.row)" v-hasPermi="['mind:machine:edit']">修改</el-button>
 
         </template>
@@ -155,6 +156,28 @@
         </div>
       </template>
     </el-dialog>
+<!--    策略管理对话框-->
+
+    <el-dialog title="策略管理" v-model="policyOpen" width="700px" append-to-body>
+      <el-form ref="machineRef" :model="form"  label-width="90px" >
+        <el-form-item label="选择策略" prop="policyId">
+            <el-select v-model="form.policyId" placeholder="请选择策略" >
+              <el-option
+                  v-for="item in policyList"
+                  :key="item.policyId"
+                  :label="item.policyName"
+                  :value="item.policyId">
+              </el-option>
+            </el-select>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="cancel">取 消</el-button>
+          <el-button type="primary" @click="submitForm">确 定</el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -165,6 +188,7 @@ import { listVmType} from "@/api/mind/vmType.js";
 import {loadAllParams} from "@/api/page.js";
 import {listNodeList} from "@/api/mind/nodeList.js";
 import {listRegion} from "@/api/mind/region.js";
+import {listPolicy} from "@/api/mind/policy.js";
 
 const { proxy } = getCurrentInstance()
 const { vm_status } = proxy.useDict('vm_status')
@@ -219,6 +243,7 @@ function getList() {
 // 取消按钮
 function cancel() {
   open.value = false
+  policyOpen.value = false
   reset()
 }
 
@@ -287,6 +312,22 @@ function handleUpdate(row) {
   })
 }
 
+//准备开关
+const policyOpen = ref(false)
+const policyList = ref([])
+//策略按钮操作
+function handleUpdatePolicy(row) {
+   //1为表单复制策略id和设备id
+  //不需要回显那么多数据，所以需要控制一下
+   form.value.policyId = row.policyId
+   form.value.id = row.id
+  //2.查询策略信息
+  listPolicy(loadAllParams).then(response => {
+    policyList.value = response.rows
+    policyOpen.value = true
+  })
+}
+
 /** 提交按钮 */
 function submitForm() {
   proxy.$refs["machineRef"].validate(valid => {
@@ -295,6 +336,7 @@ function submitForm() {
         updateMachine(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功")
           open.value = false
+          policyOpen.value = false
           getList()
         })
       } else {
