@@ -77,6 +77,7 @@
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
+          <el-button link type="primary"  @click="getPolicyInfo(scope.row)" v-hasPermi="['mind:machine:list']">查看详情</el-button>
           <el-button link type="primary"  @click="handleUpdate(scope.row)" v-hasPermi="['mind:policy:edit']">修改</el-button>
           <el-button link type="primary"  @click="handleDelete(scope.row)" v-hasPermi="['mind:policy:remove']">删除</el-button>
         </template>
@@ -108,11 +109,29 @@
         </div>
       </template>
     </el-dialog>
+<!--    策略详情对话框-->
+    <el-dialog title="策略详情" v-model="policyOpen" width="700px" append-to-body>
+      <el-form :model="form" >
+        <el-form-item label="策略名称">
+          <el-input v-model="form.policyName" disabled />
+        </el-form-item>
+      </el-form>
+      <label>包含点位：</label>
+      <el-table :data="machineList">
+        <el-table-column label="序号" type="index" width="120" align="center" />
+        <el-table-column label="设备地址" align="center" prop="addr" show-overflow-tooltip="true" />
+        <el-table-column label="设备编号" align="center" prop="innerCode" />
+      </el-table>
+
+    </el-dialog>
   </div>
 </template>
 
 <script setup name="Policy">
 import { listPolicy, getPolicy, delPolicy, addPolicy, updatePolicy } from "@/api/mind/policy"
+import {listMachine} from "@/api/mind/machine.js";
+import {loadAllParams} from "@/api/page.js";
+import {parseTime} from "@/utils/ruoyi.js";
 
 const { proxy } = getCurrentInstance()
 
@@ -210,6 +229,22 @@ function handleUpdate(row) {
     title.value = "修改策略管理"
   })
 }
+
+const policyOpen = ref(false)
+const machineList = ref([])
+//查看详情按钮操作
+function getPolicyInfo(row) {
+  //获取设备列表信息
+  form.value = row
+  //根据策略id查询列表
+  loadAllParams.policyId = row.policyId
+  listMachine().then(response => {
+    machineList.value = response.rows
+    //这个用来控制对话框的开关
+    policyOpen.value = true
+  })
+}
+
 
 /** 提交按钮 */
 function submitForm() {
