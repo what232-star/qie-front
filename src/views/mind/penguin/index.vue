@@ -46,6 +46,16 @@
           v-hasPermi="['mind:penguin:remove']"
         >删除</el-button>
       </el-col>
+      <!--权限跟新增保持一致即可-->
+      <el-col :span="1.5">
+        <el-button
+            type="warning"
+            plain
+            icon="Upload"
+            @click="handleImport"
+            v-hasPermi="['mind:penguin:add']"
+        > 导入 </el-button>
+      </el-col>
       <el-col :span="1.5">
         <el-button
           type="warning"
@@ -60,7 +70,7 @@
 
     <el-table v-loading="loading" :data="penguinList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="序号" type="index" align="center" prop="penguinId" width="50"/>
+      <el-table-column label="编号" type="index" align="center" prop="penguinId" width="50"/>
       <el-table-column label="企鹅名称" align="center" prop="penguinName" />
       <el-table-column label="企鹅图片" align="center" prop="penguinImage" width="100">
         <template #default="scope">
@@ -135,6 +145,33 @@
         </div>
       </template>
     </el-dialog>
+<!--    数据导入对话框-->
+          <el-dialog title="导入企鹅" v-model="excelOpen" width="400px" append-to-body>
+            <el-upload
+                ref="uploadRef"
+                class="upload-demo"
+                :action="uploadExcelUrl"
+                :headers="headers"
+                :auto-upload="false"
+                :on-success="handleUploadSuccess"
+                :on-error="handleUploadError"
+                :before-upload="handleBeforeUpload"
+                :limit="1"
+            >
+<!--              关闭自动上传-->
+
+
+            <template #trigger>
+              <el-button type="primary">上传文件</el-button></template>
+            <el-button class="ml-3" type="success"@click="submitUpload" style="margin-left: 10px;">
+                上传
+            </el-button>
+            <template #tip>
+              <div class="el-upload_tip">
+                文件仅支持xls/xlsx格式，文件大小不得超过1M
+              </div>
+            </template></el-upload>
+    </el-dialog>
   </div>
 </template>
 
@@ -143,6 +180,7 @@ import { listPenguin, getPenguin, delPenguin, addPenguin, updatePenguin } from "
 import {parseTime} from "../../../utils/ruoyi.js";
 import {listPenguinClass} from "@/api/mind/penguinClass.js";
 import {loadAllParams} from "@/api/page.js";
+import {getToken} from "@/utils/auth.js";
 
 const { proxy } = getCurrentInstance()
 
@@ -187,6 +225,77 @@ const data = reactive({
 })
 
 const { queryParams, form, rules } = toRefs(data)
+
+function handleUploadSuccess(res, file) {
+  if (res.code === 200) {
+    proxy.$modal.msgSuccess("上传成功")
+    excelOpen.value = false
+    getList()
+  } else {
+    proxy.$modal.msgError(res.msg)
+  }
+  uploadRef.value.clearFiles()
+  proxy.$modal.closeLoading()
+}
+
+// 上传失败
+function handleUploadError() {
+  proxy.$modal.msgError("上传Excel失败")
+  uploadRef.value.clearFiles()
+  proxy.$modal.closeLoading()
+}
+
+
+//上传前校验
+const props = defineProps({
+  modelValue: [String, Object, Array],
+
+  // 大小限制(MB)
+  fileSize: {
+    type: Number,
+    default: 1
+  },
+  // 文件类型, 例如['xls', 'xlsx']
+  fileType: {
+    type: Array,
+    default: () => ['xls', 'xlsx']
+  },
+
+})
+
+
+// 上传前loading加载
+function handleBeforeUpload(file) {
+  let isExcel = false
+  if (props.fileType.length) {
+    let fileExtension = ""
+    if (file.name.lastIndexOf(".") > -1) {
+      fileExtension = file.name.slice(file.name.lastIndexOf(".") + 1)
+    }
+    isExcel = props.fileType.some(type => {
+      if (file.type.indexOf(type) > -1) return true
+      if (fileExtension && fileExtension.indexOf(type) > -1) return true
+      return false
+    })
+  }
+  if (!isExcel) {
+    proxy.$modal.msgError(`文件格式不正确，请上传${props.fileType.join("/")}图片格式文件!`)
+    return false
+  }
+  if (file.name.includes(',')) {
+    proxy.$modal.msgError('文件名不正确，不能包含英文逗号!')
+    return false
+  }
+  if (props.fileSize) {
+    const isLt = file.size / 1024 / 1024 < props.fileSize
+    if (!isLt) {
+      proxy.$modal.msgError(`上传excel大小不能超过 ${props.fileSize} MB!`)
+      return false
+    }
+  }
+  proxy.$modal.loading("正在上传excel，请稍候...")
+}
+
 
 /** 查询企鹅盲盒管理列表 */
 function getList() {
@@ -299,6 +408,26 @@ function handleExport() {
     ...queryParams.value
   }, `penguin_${new Date().getTime()}.xlsx`)
 }
+
+//导入按钮操作
+const excelOpen = ref(false)
+function handleImport() {
+  excelOpen.value = true
+}
+
+//上传地址
+const uploadExcelUrl = ref(import.meta.env.VITE_APP_BASE_API + "mind/penguin/import")
+//上传请求头
+const headers = ref({ Authorization: "Bearer " + getToken() })
+
+const uploadRef = ref({})
+//上传excel文件
+function submitUpload() {
+  uploadRef.value.submit()
+}
+
+
+
 
 const penguinClassList = ref([])
 function getPenguinClassList() {
