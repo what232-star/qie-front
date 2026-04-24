@@ -16,16 +16,16 @@
     </div>
     <div>
       <el-button
-        type="text"
+        link
         class="el-button--primary-text"
         @click="handleSetClick"
       >
         添加
       </el-button>
       <el-button
-        type="text"
+        link
         class="el-button--danger-text"
-        :disabled="!channel.penguin ? true : false"
+        :disabled="!channel.penguin"
         @click="handleRemoveClick"
       >
         删除
@@ -98,6 +98,27 @@ const handleRemoveClick = () => {
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
+    }
+  }
+
+  // 按钮颜色样式
+  :deep(.el-button--primary-text) {
+    color: #409eff;
+    
+    &:hover {
+      color: #66b1ff;
+    }
+  }
+
+  :deep(.el-button--danger-text) {
+    color: #f56c6c;
+    
+    &:hover {
+      color: #f78989;
+    }
+    
+    &.is-disabled {
+      color: #c0c4cc;
     }
   }
 }

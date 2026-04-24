@@ -33,8 +33,8 @@
             <ChannelDialogItem
               :current-index="computedCurrentIndex(vmRowIndex, vmColIndex)"
               :channel="channels[computedCurrentIndex(vmRowIndex, vmColIndex)]"
-              @openSetSkuDialog="openSetSkuDialog"
-              @openRemoveSkuDialog="openRemoveSkuDialog"
+              @openSetPenguinDialog="openSetPenguinDialog"
+              @openRemovePenguinDialog="openRemovePenguinDialog"
             >
             </ChannelDialogItem>
           </el-col>
@@ -119,17 +119,17 @@
               :span="5"
             >
               <div class="item">
-                <!-- TODO: 只有一行的时候考虑 -->
                 <div
-                  class="sku"
-                  :class="index < 5 ? 'space' : ''"
+                  class="penguin"
+                  :class="{ 'is-active': String(currentRow.penguinId) === String(item.penguinId) }"
                   @click="handleCurrentChange(index)"
                 >
-                  <img
-                    v-show="currentRow.penguinId === item.penguinId"
-                    class="selected"
-                    src="@/assets/logo/logo.png"
-                  />
+                  <div
+                    v-if="String(currentRow.penguinId) === String(item.penguinId)"
+                    class="selected-icon"
+                  >
+                    <el-icon color="#fff" :size="16"><Check /></el-icon>
+                  </div>
                   <img class="img" :src="item.penguinImage" />
                   <div class="name" :title="item.penguinName">
                     {{ item.penguinName }}
@@ -172,6 +172,7 @@
 const { proxy } = getCurrentInstance();
 // 滚动插件
 import { ElScrollbar } from 'element-plus';
+import { Check } from '@element-plus/icons-vue'
 // 接口
 import {
   getGoodsList,
@@ -204,6 +205,7 @@ const listLoading = ref(false);
 const vmType = ref({}); //获取货道基本信息
 const channels = ref({}); //货道数据
 const scroll = ref(null); //滚动条ref
+const formLabelWidth = ref('100px'); //表单标签宽度
 // 监听货道弹层显示/隐藏
 watch(
   () => props.goodVisible,
@@ -339,4 +341,4 @@ const handleClick = async () => {
   }
 };
 </script>
-// <style lang="scss" scoped src="../index.scss"></style>
+<style lang="scss" scoped src="../index.scss"></style>
