@@ -330,7 +330,7 @@ const handleClick = async () => {
     return {
       innerCode: props.goodData.innerCode,
       channelCode: item.channelCode,
-      skuId: item.skuId,
+      penguinId: item.penguinId,
     };
   });
   const res = await channelConfig(channelModelView.value);
