@@ -94,6 +94,11 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  // 已有的补货详情数据
+  detailData: {
+    type: Array,
+    default: () => [],
+  },
 });
 // 定义变量
 const emit = defineEmits(['handleClose', 'getDetailList']);
@@ -122,10 +127,16 @@ const getChannelList = () => {
   getGoodsList(props.innerCode).then((response) => {
     channelList.value = response.data;
     channelList.value.forEach((channel) => {
-      channel.expectCapacity =
-        channel.penguin !== null
-          ? channel.maxCapacity - channel.currentCapacity
-          : 0;
+      // 查找是否已有保存的补货数量
+      const existingDetail = props.detailData.find(
+        detail => detail.channelCode === channel.channelCode
+      );
+
+      channel.expectCapacity = existingDetail
+        ? existingDetail.expectCapacity  // 使用已保存的值
+        : (channel.penguin !== null
+          ? channel.maxCapacity - channel.currentCapacity  // 否则使用计算值
+          : 0);
     });
   });
 };

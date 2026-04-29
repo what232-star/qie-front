@@ -204,6 +204,7 @@
     <ReplenishmentDialog
       :channelVisible="channelVisible"
       :innerCode="form.innerCode"
+      :detailData="form.details || []"
       @getDetailList="getDetailList"
       @handleClose="channelDetailsClose"
     ></ReplenishmentDialog>
