@@ -149,6 +149,15 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="设备状态" prop="vmStatus" v-if="form.innerCode != null">
+          <el-radio-group v-model="form.vmStatus">
+            <el-radio
+              v-for="dict in vm_status"
+              :key="dict.value"
+              :value="dict.value"
+            >{{ dict.label }}</el-radio>
+          </el-radio-group>
+        </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
