@@ -52,8 +52,24 @@ export default defineConfig(({ mode, command }) => {
           changeOrigin: true,
           rewrite: (p) => p.replace(/^\/dev-api/, '')
         },
-         // springdoc proxy
-         '^/v3/api-docs/(.*)': {
+        // Knife4j 相关代理（必须添加）
+        '/doc.html': {
+          target: baseUrl,
+          changeOrigin: true,
+        },
+        '/webjars/**': {
+          target: baseUrl,
+          changeOrigin: true,
+        },
+        '/v3/api-docs': {
+          target: baseUrl,
+          changeOrigin: true,
+        },
+        '/v3/api-docs/**': {
+          target: baseUrl,
+          changeOrigin: true,
+        },
+        '/swagger-resources/**': {
           target: baseUrl,
           changeOrigin: true,
         }
