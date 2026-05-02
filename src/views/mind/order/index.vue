@@ -43,7 +43,7 @@
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
-          <el-button link type="primary"  @click="handleUpdate(scope.row)" v-hasPermi="['manage:order:query']">查看详情</el-button>
+          <el-button link type="primary"  @click="handleUpdate(scope.row)" v-hasPermi="['mind:order:query']">查看详情</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -71,7 +71,7 @@
 </template>
 
 <script setup name="Order">
-import { listOrder, getOrder, delOrder, addOrder, updateOrder } from "@/api/manage/order";
+import { listOrder, getOrder, delOrder, addOrder, updateOrder } from "@/api/mind/order";
 
 const { proxy } = getCurrentInstance();
 const { order_status } = proxy.useDict('order_status');
