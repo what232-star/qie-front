@@ -26,16 +26,20 @@
     </el-form>
 
 
-    <el-table v-loading="loading" :data="orderList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="orderList">
       <el-table-column label="序号" type="index" align="center" prop="id" width="80"/>
       <el-table-column label="订单编号" align="center" prop="orderNo" show-overflow-tooltip="" />
-      <el-table-column label="商品名称" align="center" prop="skuName" />
+      <el-table-column label="商品名称" align="center" prop="penguinName" />
       <el-table-column label="订单状态" align="center" prop="status">
         <template #default="scope">
           <dict-tag :options="order_status" :value="scope.row.status"/>
         </template>
       </el-table-column>
-      <el-table-column label="订单金额" align="center" prop="amount" />
+      <el-table-column label="订单金额" align="center" prop="amount">
+        <template #default="scope">
+          <span>{{ (scope.row.amount / 100).toFixed(2) }} 元</span>
+        </template>
+      </el-table-column>
       <el-table-column label="订单时间" align="center" prop="createTime" width="180">
         <template #default="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
@@ -57,13 +61,35 @@
     />
 
     <!-- 查看详情对话框 -->
-    <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-      <el-form ref="orderRef" :model="form" :rules="rules" label-width="80px">
-      </el-form>
+    <el-dialog :title="title" v-model="open" width="600px" append-to-body>
+      <div v-if="orderDetailList.length > 0">
+        <el-descriptions :column="1" border size="large">
+          <el-descriptions-item label="订单编号">{{ orderDetailList[0].orderNo }}</el-descriptions-item>
+          <el-descriptions-item label="订单状态">
+            <dict-tag :options="order_status" :value="orderDetailList[0].status"/>
+          </el-descriptions-item>
+          <el-descriptions-item label="订单金额">
+            <span style="color: #f56c6c; font-weight: bold;">{{ (orderDetailList[0].amount / 100).toFixed(2) }} 元</span>
+          </el-descriptions-item>
+          <el-descriptions-item label="商品价格">{{ (orderDetailList[0].price / 100).toFixed(2) }} 元</el-descriptions-item>
+          <el-descriptions-item label="支付状态">
+            <el-tag :type="orderDetailList[0].payStatus === 0 ? 'warning' : 'success'">
+              {{ orderDetailList[0].payStatus === 0 ? '未支付' : '已支付' }}
+            </el-tag>
+          </el-descriptions-item>
+          <el-descriptions-item label="支付方式">
+            {{ orderDetailList[0].payType === '2' ? '支付宝' : orderDetailList[0].payType === '1' ? '微信' : '其他' }}
+          </el-descriptions-item>
+          <el-descriptions-item label="商品编码">{{ orderDetailList[0].innerCode }}</el-descriptions-item>
+          <el-descriptions-item label="节点ID">{{ orderDetailList[0].nodeId }}</el-descriptions-item>
+          <el-descriptions-item label="地址">{{ orderDetailList[0].addr }}</el-descriptions-item>
+          <el-descriptions-item label="订单时间">{{ parseTime(orderDetailList[0].createTime, '{y}-{m}-{d} {h}:{i}:{s}') }}</el-descriptions-item>
+          <el-descriptions-item label="备注">{{ orderDetailList[0].remark || '无' }}</el-descriptions-item>
+        </el-descriptions>
+      </div>
       <template #footer>
         <div class="dialog-footer">
-          <el-button type="primary" @click="submitForm">确 定</el-button>
-          <el-button @click="cancel">取 消</el-button>
+          <el-button @click="open = false">关 闭</el-button>
         </div>
       </template>
     </el-dialog>
@@ -72,6 +98,8 @@
 
 <script setup name="Order">
 import { listOrder, getOrder, delOrder, addOrder, updateOrder } from "@/api/mind/order";
+import { loadAllParams } from "@/api/page.js";
+import {parseTime} from "../../../utils/ruoyi.js";
 
 const { proxy } = getCurrentInstance();
 const { order_status } = proxy.useDict('order_status');
@@ -101,8 +129,7 @@ const data = reactive({
 
 const { queryParams, form, rules } = toRefs(data);
 
-
-
+const orderDetailList = ref([]);
 
 /** 查询订单列表 */
 function getList() {
@@ -117,7 +144,6 @@ function getList() {
 // 取消按钮
 function cancel() {
   open.value = false;
-  reset();
 }
 
 
@@ -137,11 +163,17 @@ function resetQuery() {
 
 /** 查看详情操作 */
 function handleUpdate(row) {
-  const _id = row.id || ids.value
-  getOrder(_id).then(response => {
-    form.value = response.data;
+  const _id = row.id;
+  if (!_id) {
+    proxy.$modal.msgError("订单ID不存在");
+    return;
+  }
+  listOrder(loadAllParams).then(response => {
+    orderDetailList.value = response.rows.filter(item => item.id === _id);
     open.value = true;
     title.value = "订单详情";
+  }).catch(error => {
+    proxy.$modal.msgError("获取订单详情失败");
   });
 }
 
