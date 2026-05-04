@@ -1,22 +1,26 @@
 <template>
   <div class="app-container home">
-    <el-row :gutter="20">
-      <el-col :span="18">
-        <el-row :gutter="20">
-          <el-col :span="13">
+    <el-row :gutter="16">
+      <el-col :span="24">
+        <el-row :gutter="16">
+          <el-col :span="14">
             <home-user-task-stats />
           </el-col>
-          <el-col :span="11">
+          <el-col :span="10">
             <home-sku-sale-stats />
           </el-col>
         </el-row>
+      </el-col>
+    </el-row>
+    <el-row :gutter="16" style="margin-top: 16px">
+      <el-col :span="12">
         <sku-sale-collect-chart />
       </el-col>
-      <el-col :span="6">
+      <el-col :span="12">
         <sku-sale-rank-chart />
       </el-col>
     </el-row>
-    <el-row :gutter="20" style="margin-top: 20px">
+    <el-row :gutter="16" style="margin-top: 16px">
       <el-col :span="14">
         <partner-node-collect-chart />
       </el-col>
@@ -24,6 +28,9 @@
         <abnormal-equipment-table />
       </el-col>
     </el-row>
+
+    <!-- AI 智能助手 -->
+    <ai-assistant />
   </div>
 </template>
 
@@ -34,6 +41,7 @@ import SkuSaleRankChart from './components/sku-sale-rank-chart.vue';
 import SkuSaleCollectChart from './components/sku-sale-collect-chart.vue';
 import PartnerNodeCollectChart from './components/partner-node-collect-chart.vue';
 import AbnormalEquipmentTable from './components/abnormal-equipment-table.vue'
+import AiAssistant from '@/components/AiAssistant'
 </script>
 
 <style scoped lang="scss">

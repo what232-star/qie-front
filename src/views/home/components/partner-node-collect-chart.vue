@@ -2,7 +2,7 @@
   <div class="box partner-node-collect">
     <div class="header">
       <div class="title">熊熊合作商点位数Top5</div>
-      <svg-icon name="more" class="more" @click="handleMoreClick" />
+      <el-icon class="more" @click="handleMoreClick"><MoreFilled /></el-icon>
     </div>
     <el-row :gutter="20" type="flex" align="middle" class="body">
       <el-col :span="17">
@@ -25,6 +25,11 @@
 </template>
 <script setup>
 import PartnerNodeCollectPieChart from './partner-node-collect-pie-chart.vue'
+import { MoreFilled } from '@element-plus/icons-vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
 // 定义变量
 const pieChartOption = ref({
   seriesData: [
@@ -50,6 +55,11 @@ const pieChartOption = ref({
     },
   ],
 });
+
+// 点击更多按钮跳转到AI对话页面
+function handleMoreClick() {
+  router.push('/mind/ai/chat')
+}
 </script>
 <style scoped>
 .partner-node-collect{
