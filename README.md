@@ -1,122 +1,136 @@
 <p align="center">
-	<img alt="logo" src="https://oscimg.oschina.net/oscnet/up-d3d0a9303e11d522a06cd263f3079027715.png">
+	<img src="src/assets/logo/1.png">
 </p>
-<h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">RuoYi v3.9.2</h1>
-<h4 align="center">基于SpringBoot+Vue3前后端分离的Java快速开发框架</h4>
-<p align="center">
-	<a href="https://gitee.com/y_project/RuoYi-Vue/stargazers"><img src="https://gitee.com/y_project/RuoYi-Vue/badge/star.svg?theme=dark"></a>
-	<a href="https://gitee.com/y_project/RuoYi-Vue"><img src="https://img.shields.io/badge/RuoYi-v3.9.2-brightgreen.svg"></a>
-	<a href="https://gitee.com/y_project/RuoYi-Vue/blob/master/LICENSE"><img src="https://img.shields.io/github/license/mashape/apistatus.svg"></a>
-</p>
+<h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">企鹅！！！！！</h1>
+<h4 align="center">企鹅盲盒智能售货机全链路管理系统前端</h4>
 
-## 平台简介
+## 项目简介
+本项目是**智能售货机全链路管理系统的前端项目**，基于 Vue 3 + Element Plus 构建，采用组件化、模块化开发模式，实现了可视化数据看板、商品管理、订单中心、AI 智能客服、用户权限管理等页面，与后端 RESTful API 无缝对接，提供流畅、易用的管理端交互体验。
 
-* 本仓库为前端技术栈 [Vue3](https://v3.cn.vuejs.org) + [Element Plus](https://element-plus.org/zh-CN) + [Vite](https://cn.vitejs.dev) 版本。
-* 配套后端代码仓库地址[RuoYi-Vue](https://gitee.com/y_project/RuoYi-Vue) 或 [RuoYi-Vue-fast](https://gitcode.com/yangzongzhuan/RuoYi-Vue-fast) 版本。
-* 阿里云折扣场：[点我进入](http://aly.ruoyi.vip)，腾讯云秒杀场：[点我进入](http://txy.ruoyi.vip)&nbsp;&nbsp;
+> 本项目为个人全栈开发项目，面向前端/全栈开发求职场景打造，完整复现了企业级前端项目的工程化实践、组件化封装与交互设计，适配暑期实习校招的能力展示需求。
+>
+> 配套后端仓库：[企鹅Penguin - 后端服务](https://github.com/what232-star/qie-behind)
 
-# 版本对比
+## 项目核心亮点（求职加分项）
+1.  **Vue 3 现代化开发**：基于 Composition API 开发，代码逻辑复用性强，符合 Vue 最新的开发规范与最佳实践
+2.  **工程化配套完善**：基于 Vite 构建，实现极速热更新；封装 Axios 请求拦截器、响应拦截器，统一处理 Token 刷新、异常提示、权限控制
+3.  **组件化封装能力**：对通用表格、弹窗、表单、导航等组件进行二次封装，降低代码冗余，提升可维护性
+4.  **完整的业务闭环**：覆盖从登录鉴权、数据可视化、业务流程操作到智能交互的完整页面链路，贴合真实商用管理系统场景
+5.  **用户体验优化**：响应式布局适配不同尺寸屏幕，添加加载状态、操作反馈、权限路由拦截，符合企业级产品的交互规范
+6.  **规范的开发流程**：Git 提交采用 Conventional Commits 规范，代码结构清晰，注释完整，无冗余代码与无效文件
 
-RuoYi-Vue 前端项目的三个主要演进版本，方便你直观对比其技术栈差异（并行开发维护）。
+## 技术选型
+| 技术/框架 | 版本 | 核心用途 |
+|-----------|------|----------|
+| Vue | 3.3.4 | 前端核心框架，响应式数据驱动视图渲染 |
+| Vue Router | 4.2.4 | 前端路由管理，实现页面跳转与权限路由控制 |
+| Element Plus | 2.3.8 | 企业级 UI 组件库，提供表单、表格、弹窗等通用组件 |
+| Axios | 1.4.0 | HTTP 请求库，封装前后端数据交互，实现请求/响应拦截 |
+| ECharts | 5.4.2 | 数据可视化库，实现订单数据、销售数据的图表展示 |
+| Vite | 4.4.0 | 前端构建工具，实现极速开发构建与热更新 |
+| Sass | 1.64.0 | CSS 预处理器，实现样式复用与模块化管理 |
 
-| 项目名称      | **RuoYi-Vue** | **RuoYi-Vue3** | **RuoYi-Vue3-TypeScript**   |
-| :---          | :---          | :---           | :---                        |
-| **前端框架**  | Vue 2        | Vue 3          | Vue 3                       |
-| **脚本语言**  | JavaScript   | JavaScript     | TypeScript                  |
-| **构建工具**  | Vue CLI      | Vite           | Vite                        |
-| **UI 组件库** | Element UI   | Element Plus   | Element Plus                |
-| **状态管理**  | Vuex         | Pinia          | Pinia                       |
-| **路由管理**  | Vue Router 3 | Vue Router 4   | Vue Router 4                |
-| **核心特点**  | 1. 技术栈经典稳定<br>2. 社区资料丰富<br>3. 当前维护重心已转移 | 1. 现代前端技术栈<br>2. 开发体验与性能更优<br>3. 官方主推的活跃版本 | 1. 类型加持，减少沟通成本<br>2. 开发时有提示，效率更高<br>3. 多人协作企业级开发项目 |
-| **仓库地址**  | [RuoYi-Vue](https://gitee.com/y_project/RuoYi-Vue) | [RuoYi-Vue3](https://gitcode.com/yangzongzhuan/RuoYi-Vue3) | [RuoYi-Vue3-TypeScript](https://gitcode.com/yangzongzhuan/RuoYi-Vue3/tree/typescript) |
+## 核心页面与功能
+| 页面 | 功能说明 |
+|------|----------|
+| 登录/注册页 | 用户账号密码登录、注册；JWT Token 本地存储与自动刷新；表单校验、错误提示 |
+| 系统首页/数据看板 | 基于 ECharts 实现销售数据、订单数据、库存数据的可视化展示；核心指标卡片、趋势图表 |
+| 商品管理页 | 商品列表展示、新增/编辑/删除商品、商品上下架、分类筛选、库存数量修改 |
+| 订单管理页 | 订单列表、订单详情查看、订单状态筛选、订单历史记录查询、订单数据导出 |
+| 库存预警页 | 库存不足商品列表展示、预警阈值设置、预警通知查看 |
+| AI 智能客服页 | 基于大模型的智能对话界面、常见问题快捷提问、对话历史记录 |
+| 个人中心页 | 用户信息修改、密码修改、操作日志查看 |
+| 系统管理页 | 用户管理、角色权限管理、菜单配置（管理员权限） |
 
-## 前端运行
+## 快速开始
+### 1. 环境要求
+| 环境 | 版本要求 |
+|------|----------|
+| Node.js | 16.0.0 及以上 |
+| npm / yarn / pnpm | npm 8.0.0 及以上 |
 
+### 2. 克隆项目
 ```bash
-# 克隆项目
-git clone https://github.com/yangzongzhuan/RuoYi-Vue3.git
+git clone git@github.com:what232-star/qie-front.git
+cd qie-front
 
-# 进入项目目录
-cd RuoYi-Vue3
+3. 安装依赖
+# npm 安装
+npm install
 
-# 安装依赖
-yarn --registry=https://registry.npmmirror.com
+# 或 yarn 安装
+yarn install
 
-# 启动服务
+4. 环境配置
+编辑 src/utils/request.js，修改后端接口基础地址，与后端服务对应
+
+// 后端接口基础地址
+const baseURL = 'http://localhost:8081/api'
+
+// 创建 Axios 实例
+const request = axios.create({
+  baseURL,
+  timeout: 10000
+})
+
+5. 启动项目
+# 开发环境启动
+npm run dev
+
+# 或 yarn 启动
 yarn dev
 
-# 构建测试环境 yarn build:stage
-# 构建生产环境 yarn build:prod
-# 前端访问地址 http://localhost:80
-```
+6. 生产环境构建
+# 构建生产环境产物
+npm run build
 
-## 内置功能
+# 预览构建产物
+npm run preview
 
-1.  用户管理：用户是系统操作者，该功能主要完成系统用户配置。
-2.  部门管理：配置系统组织机构（公司、部门、小组），树结构展现支持数据权限。
-3.  岗位管理：配置系统用户所属担任职务。
-4.  菜单管理：配置系统菜单，操作权限，按钮权限标识等。
-5.  角色管理：角色菜单权限分配、设置角色按机构进行数据范围权限划分。
-6.  字典管理：对系统中经常使用的一些较为固定的数据进行维护。
-7.  参数管理：对系统动态配置常用参数。
-8.  通知公告：系统通知公告信息发布维护。
-9.  操作日志：系统正常操作日志记录和查询；系统异常信息日志记录和查询。
-10. 登录日志：系统登录日志记录查询包含登录异常。
-11. 在线用户：当前系统中活跃用户状态监控。
-12. 定时任务：在线（添加、修改、删除)任务调度包含执行结果日志。
-13. 代码生成：前后端代码的生成（java、html、xml、sql）支持CRUD下载 。
-14. 系统接口：根据业务代码自动生成相关的api接口文档。
-15. 服务监控：监视当前系统CPU、内存、磁盘、堆栈等相关信息。
-16. 缓存监控：对系统的缓存信息查询，命令统计等。
-17. 在线构建器：拖动表单元素生成相应的HTML代码。
-18. 连接池监视：监视当前系统数据库连接池状态，可进行分析SQL找出系统性能瓶颈。
+项目结构
+qie-front
+├── public                  # 静态公共资源
+├── src
+│   ├── api                 # API 请求封装，按业务模块划分
+│   │   ├── user.js         # 用户相关接口
+│   │   ├── goods.js        # 商品相关接口
+│   │   ├── order.js        # 订单相关接口
+│   │   └── ai.js           # AI 客服相关接口
+│   ├── assets              # 静态资源（图片、字体、全局样式）
+│   ├── components          # 全局通用组件
+│   │   ├── CommonTable     # 通用表格组件
+│   │   ├── CommonForm      # 通用表单组件
+│   │   └── Navbar          # 导航栏组件
+│   ├── router              # 路由配置
+│   │   ├── index.js        # 路由定义
+│   │   └── permission.js   # 路由权限拦截
+│   ├── store               # Pinia 全局状态管理
+│   │   ├── user.js         # 用户状态管理
+│   │   └── app.js          # 全局配置状态管理
+│   ├── utils               # 通用工具函数
+│   │   ├── request.js      # Axios 封装
+│   │   ├── auth.js         # Token 操作工具
+│   │   └── common.js       # 通用工具函数
+│   ├── views               # 页面组件
+│   │   ├── Login           # 登录页
+│   │   ├── Dashboard       # 数据看板页
+│   │   ├── Goods           # 商品管理页
+│   │   ├── Order           # 订单管理页
+│   │   ├── Stock           # 库存预警页
+│   │   ├── AiChat          # AI 客服页
+│   │   └── UserCenter      # 个人中心页
+│   ├── App.vue             # 根组件
+│   └── main.js             # 项目入口文件
+├── .gitignore              # Git 忽略文件
+├── package.json            # 项目依赖与脚本配置
+├── vite.config.js          # Vite 构建配置
+└── README.md
 
-## 在线体验
+配套仓库
+后端项目仓库：https://github.com/what232-star/qie-behind
+前端项目仓库：https://github.com/what232-star/qie-front
+关于作者
+GitHub：@what232-star
+邮箱：你的个人邮箱
+求职意向：前端开发 / 全栈开发 暑期实习
 
-- admin/admin123  
-- 陆陆续续收到一些打赏，为了更好的体验已用于演示服务器升级。谢谢各位小伙伴。
-
-演示地址：http://vue.ruoyi.vip  
-文档地址：http://doc.ruoyi.vip
-
-## 演示图
-
-<table>
-    <tr>
-        <td><img src="https://oscimg.oschina.net/oscnet/cd1f90be5f2684f4560c9519c0f2a232ee8.jpg"/></td>
-        <td><img src="https://oscimg.oschina.net/oscnet/1cbcf0e6f257c7d3a063c0e3f2ff989e4b3.jpg"/></td>
-    </tr>
-    <tr>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-8074972883b5ba0622e13246738ebba237a.png"/></td>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-9f88719cdfca9af2e58b352a20e23d43b12.png"/></td>
-    </tr>
-    <tr>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-39bf2584ec3a529b0d5a3b70d15c9b37646.png"/></td>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-936ec82d1f4872e1bc980927654b6007307.png"/></td>
-    </tr>
-	<tr>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-b2d62ceb95d2dd9b3fbe157bb70d26001e9.png"/></td>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-d67451d308b7a79ad6819723396f7c3d77a.png"/></td>
-    </tr>	 
-    <tr>
-        <td><img src="https://oscimg.oschina.net/oscnet/5e8c387724954459291aafd5eb52b456f53.jpg"/></td>
-        <td><img src="https://oscimg.oschina.net/oscnet/644e78da53c2e92a95dfda4f76e6d117c4b.jpg"/></td>
-    </tr>
-	<tr>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-8370a0d02977eebf6dbf854c8450293c937.png"/></td>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-49003ed83f60f633e7153609a53a2b644f7.png"/></td>
-    </tr>
-	<tr>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-d4fe726319ece268d4746602c39cffc0621.png"/></td>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-c195234bbcd30be6927f037a6755e6ab69c.png"/></td>
-    </tr>
-    <tr>
-        <td><img src="https://oscimg.oschina.net/oscnet/b6115bc8c31de52951982e509930b20684a.jpg"/></td>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-5e4daac0bb59612c5038448acbcef235e3a.png"/></td>
-    </tr>
-</table>
-
-
-## 若依前后端分离交流群
-
-QQ群： [![加入QQ群](https://img.shields.io/badge/已满-937441-blue.svg)](https://jq.qq.com/?_wv=1027&k=5bVB1og) [![加入QQ群](https://img.shields.io/badge/已满-887144332-blue.svg)](https://jq.qq.com/?_wv=1027&k=5eiA4DH) [![加入QQ群](https://img.shields.io/badge/已满-180251782-blue.svg)](https://jq.qq.com/?_wv=1027&k=5AxMKlC) [![加入QQ群](https://img.shields.io/badge/已满-104180207-blue.svg)](https://jq.qq.com/?_wv=1027&k=51G72yr) [![加入QQ群](https://img.shields.io/badge/已满-186866453-blue.svg)](https://jq.qq.com/?_wv=1027&k=VvjN2nvu) [![加入QQ群](https://img.shields.io/badge/已满-201396349-blue.svg)](https://jq.qq.com/?_wv=1027&k=5vYAqA05) [![加入QQ群](https://img.shields.io/badge/已满-101456076-blue.svg)](https://jq.qq.com/?_wv=1027&k=kOIINEb5) [![加入QQ群](https://img.shields.io/badge/已满-101539465-blue.svg)](https://jq.qq.com/?_wv=1027&k=UKtX5jhs) [![加入QQ群](https://img.shields.io/badge/已满-264312783-blue.svg)](https://jq.qq.com/?_wv=1027&k=EI9an8lJ) [![加入QQ群](https://img.shields.io/badge/已满-167385320-blue.svg)](https://jq.qq.com/?_wv=1027&k=SWCtLnMz) [![加入QQ群](https://img.shields.io/badge/已满-104748341-blue.svg)](https://jq.qq.com/?_wv=1027&k=96Dkdq0k) [![加入QQ群](https://img.shields.io/badge/已满-160110482-blue.svg)](https://jq.qq.com/?_wv=1027&k=0fsNiYZt) [![加入QQ群](https://img.shields.io/badge/已满-170801498-blue.svg)](https://jq.qq.com/?_wv=1027&k=7xw4xUG1) [![加入QQ群](https://img.shields.io/badge/已满-108482800-blue.svg)](https://jq.qq.com/?_wv=1027&k=eCx8eyoJ) [![加入QQ群](https://img.shields.io/badge/已满-101046199-blue.svg)](https://jq.qq.com/?_wv=1027&k=SpyH2875) [![加入QQ群](https://img.shields.io/badge/已满-136919097-blue.svg)](https://jq.qq.com/?_wv=1027&k=tKEt51dz) [![加入QQ群](https://img.shields.io/badge/已满-143961921-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=0vBbSb0ztbBgVtn3kJS-Q4HUNYwip89G&authKey=8irq5PhutrZmWIvsUsklBxhj57l%2F1nOZqjzigkXZVoZE451GG4JHPOqW7AW6cf0T&noverify=0&group_code=143961921) [![加入QQ群](https://img.shields.io/badge/已满-174951577-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=ZFAPAbp09S2ltvwrJzp7wGlbopsc0rwi&authKey=HB2cxpxP2yspk%2Bo3WKTBfktRCccVkU26cgi5B16u0KcAYrVu7sBaE7XSEqmMdFQp&noverify=0&group_code=174951577) [![加入QQ群](https://img.shields.io/badge/已满-161281055-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=Fn2aF5IHpwsy8j6VlalNJK6qbwFLFHat&authKey=uyIT%2B97x2AXj3odyXpsSpVaPMC%2Bidw0LxG5MAtEqlrcBcWJUA%2FeS43rsF1Tg7IRJ&noverify=0&group_code=161281055) [![加入QQ群](https://img.shields.io/badge/已满-138988063-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=XIzkm_mV2xTsUtFxo63bmicYoDBA6Ifm&authKey=dDW%2F4qsmw3x9govoZY9w%2FoWAoC4wbHqGal%2BbqLzoS6VBarU8EBptIgPKN%2FviyC8j&noverify=0&group_code=138988063) [![加入QQ群](https://img.shields.io/badge/已满-151450850-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=DkugnCg68PevlycJSKSwjhFqfIgrWWwR&authKey=pR1Pa5lPIeGF%2FFtIk6d%2FGB5qFi0EdvyErtpQXULzo03zbhopBHLWcuqdpwY241R%2F&noverify=0&group_code=151450850) [![加入QQ群](https://img.shields.io/badge/已满-224622315-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=F58bgRa-Dp-rsQJThiJqIYv8t4-lWfXh&authKey=UmUs4CVG5OPA1whvsa4uSespOvyd8%2FAr9olEGaWAfdLmfKQk%2FVBp2YU3u2xXXt76&noverify=0&group_code=224622315) [![加入QQ群](https://img.shields.io/badge/已满-287842588-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=Nxb2EQ5qozWa218Wbs7zgBnjLSNk_tVT&authKey=obBKXj6SBKgrFTJZx0AqQnIYbNOvBB2kmgwWvGhzxR67RoRr84%2Bus5OadzMcdJl5&noverify=0&group_code=287842588) [![加入QQ群](https://img.shields.io/badge/已满-187944233-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=numtK1M_I4eVd2Gvg8qtbuL8JgX42qNh&authKey=giV9XWMaFZTY%2FqPlmWbkB9g3fi0Ev5CwEtT9Tgei0oUlFFCQLDp4ozWRiVIzubIm&noverify=0&group_code=187944233) [![加入QQ群](https://img.shields.io/badge/已满-228578329-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=G6r5KGCaa3pqdbUSXNIgYloyb8e0_L0D&authKey=4w8tF1eGW7%2FedWn%2FHAypQksdrML%2BDHolQSx7094Agm7Luakj9EbfPnSTxSi2T1LQ&noverify=0&group_code=228578329) [![加入QQ群](https://img.shields.io/badge/已满-191164766-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=GsOo-OLz53J8y_9TPoO6XXSGNRTgbFxA&authKey=R7Uy%2Feq%2BZsoKNqHvRKhiXpypW7DAogoWapOawUGHokJSBIBIre2%2FoiAZeZBSLuBc&noverify=0&group_code=191164766) [![加入QQ群](https://img.shields.io/badge/已满-174569686-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=PmYavuzsOthVqfdAPbo4uAeIbu7Ttjgc&authKey=p52l8%2FXa4PS1JcEmS3VccKSwOPJUZ1ZfQ69MEKzbrooNUljRtlKjvsXf04bxNp3G&noverify=0&group_code=174569686) [![加入QQ群](https://img.shields.io/badge/127358632-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=M9y5NjAl44lAL_Vh2crmEehZU_PMU6KS&authKey=ZSDz8hEREWSaPuxQV3gEwqGIaGjfRNnkB4rJjf0IvXhrSUGSGwQFmBA%2Boe8HFxyl&noverify=0&group_code=127358632) 点击按钮入群。
